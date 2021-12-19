@@ -31,8 +31,8 @@ include(FetchContent)
 
 FetchContent_Declare(
   pybind11-src
-  GIT_REPOSITORY https://github.com/pybind/pybind11.git
-  GIT_TAG        v2.6.2
+  GIT_REPOSITORY https://gitlab.com/xchdata/pybind11.git
+  GIT_TAG        xchdata-main
 )
 FetchContent_MakeAvailable(pybind11-src)
 
