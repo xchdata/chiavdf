@@ -57,7 +57,9 @@ public:
   /**
    * @brief Reducer - constructs by using reference into cg context.
    */  
-  Reducer(ClassGroupContext &ctx_) : ctx(ctx_) {}
+  Reducer(ClassGroupContext &ctx_) :
+    ctx(ctx_),
+    lzcnt64(has_lzcnt_hard() ? &lzcnt64_hard : &lzcnt64_soft) {}
 
   ~Reducer() {}
 
@@ -124,9 +126,6 @@ private:
       r = static_cast<int64_t>(op >> (-shift));
   }
 
-bool bLZCChecked=false;
-bool bLZCHasHW=false;
-
   inline void mpz_get_si_2exp(int_fast64_t &r, int_fast64_t &exp,
                               const mpz_t op) {
     // Return an approximation x of the large mpz_t op by an int64_t and the
@@ -135,18 +134,7 @@ bool bLZCHasHW=false;
     int_fast64_t size(static_cast<long>(mpz_size(op)));
     uint_fast64_t last(mpz_getlimbn(op, (size - 1)));
 
-    if(!bLZCChecked)
-    {
-        bLZCHasHW=has_lzcnt_hard();
-        bLZCChecked=true;
-    }
-    
-    int_fast64_t lg2;
-
-    if(bLZCHasHW)
-        lg2 = exp = ((63 - lzcnt64_hard(last)) + 1);
-    else
-        lg2 = exp = ((63 - lzcnt64_soft(last)) + 1);
+    int_fast64_t lg2 = exp = ((63 - lzcnt64(last)) + 1);
 
     signed_shift(last, (63 - exp), r);
     if (size > 1) {
@@ -241,6 +229,7 @@ bool bLZCHasHW=false;
   }
 
   ClassGroupContext &ctx;
+  unsigned int (*lzcnt64)(unsigned long long);
 };
 
 #endif // REDUCER_H
