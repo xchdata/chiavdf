@@ -42,7 +42,7 @@ class Prover {
         PulmarkReducer reducer;
 
         integer B = GetB(D, segm.x, segm.y);
-        integer L=root(-D, 4);
+        integer L = root(-D, 4);
         form id;
         try {
             id = form::identity(D);
