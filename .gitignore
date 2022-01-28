@@ -22,6 +22,7 @@ src/compile_asm
 src/vdf_bench
 /vdf_server
 src/vdf_client
+src/bluebox_client
 src/1weso_test
 src/2weso_test
 src/prover_test
